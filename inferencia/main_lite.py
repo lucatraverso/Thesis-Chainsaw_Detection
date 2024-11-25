@@ -7,8 +7,8 @@ import soundfile as sf
 # Define constants for audio recording
 SAMPLE_RATE = 16000  # Sample rate (Hz)
 CHANNELS = 1         # Number of audio channels
-I = 3
-BLOCK_LENGHT = int(I*0.96*SAMPLE_RATE)
+I = 1
+BLOCK_LENGTH = int(I*0.96*SAMPLE_RATE)
 
 try:
     model_path = 'C:\\Users\\user\\Documents\\Tesis\\codigo\\modelo_final.tflite'
@@ -19,7 +19,7 @@ try:
     output_details = interpreter.get_output_details()
     scores_output_index = output_details[0]['index']
 
-    interpreter.resize_tensor_input(waveform_input_index, [BLOCK_LENGHT], strict=True)
+    interpreter.resize_tensor_input(waveform_input_index, [BLOCK_LENGTH], strict=True)
     interpreter.allocate_tensors()
 except:
     print('Error cargando el modelo')
@@ -52,7 +52,7 @@ def process_audio(indata, frames, time, status):
     
 
 # Open a stream for audio input
-stream = sd.InputStream(callback=process_audio, blocksize=int(I*0.96*16000), 
+stream = sd.InputStream(callback=process_audio, blocksize=BLOCK_LENGTH, 
                         samplerate=SAMPLE_RATE, channels=CHANNELS, dtype=np.float32)
 
 print("Recording... Press Ctrl+C to stop.")
